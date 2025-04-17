@@ -1,10 +1,16 @@
 import { gql } from "@apollo/client";
 import client from "../client"
+import { BlockRenderer } from "./components/BlockRenderer";
+import { cleanAndTransformBlocks } from "../utils/cleanAndTransformBlocks";
 
 export default async function Home() {
-    const props = await getProps()
+    const {props} = await getProps()
     console.log('props: ', props)
-    return <div>Next JS &amp; WordPress course.</div>;
+    return (
+        <>
+        <BlockRenderer blocks={props.blocks}/>
+        </>
+    )
 }
 
 // doing an equivalent of getStaticProps in page directory
@@ -26,8 +32,7 @@ async function getProps() {
     })
     return{
         props: {
-            blocks: data.nodeByUri.blocks,
-            myexampleProp: "test"
+            blocks: cleanAndTransformBlocks(data.nodeByUri.blocks),
         }
     }
 }
